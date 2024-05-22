@@ -1,0 +1,22 @@
+<!-- register-dialog.component.html -->
+<h1 mat-dialog-title>Kayıt Ol</h1>
+<div mat-dialog-content>
+  <form [formGroup]="registerForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Şifre</mat-label>
+      <input matInput formControlName="password" type="password" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Şifre Tekrar</mat-label>
+      <input matInput formControlName="confirmPassword" type="password" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">İptal</button>
+  <button mat-button color="primary" (click)="onRegister()" [disabled]="!registerForm.valid">Kayıt Ol</button>
+</div>
