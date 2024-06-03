@@ -19,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/:collection/first', async function (req, res) {
   try {
+    console.log('HTTP GET REQUEST /:collection/first');
+
     const collection = client.db(dbName).collection(req.params.collection);
 
     const filterString = req.query["filter"];
@@ -47,6 +49,8 @@ app.get('/:collection/first', async function (req, res) {
 
 app.get('/:collection', async function (req, res) {
   try {
+    console.log('HTTP GET REQUEST /:collection');
+
     const collection = client.db(dbName).collection(req.params.collection);
 
     const filterString = req.query["filter"];
@@ -75,6 +79,8 @@ app.get('/:collection', async function (req, res) {
 
 app.put('/:collection', async function (req, res) {
   try {
+    console.log('HTTP PUT REQUEST /:collection');
+
     const collection = client.db(dbName).collection(req.params.collection);
 
     console.log('put', req.params.collection, req.body._id, req.body);
@@ -100,6 +106,8 @@ app.put('/:collection', async function (req, res) {
 
 app.post('/:collection', async function (req, res) {
   try {
+    console.log('HTTP POST REQUEST /:collection');
+
     const collection = client.db(dbName).collection(req.params.collection);
 
     console.log('post', req.params.collection, req.body);
@@ -125,6 +133,8 @@ app.post('/:collection', async function (req, res) {
 
 app.delete('/:collection', async function (req, res) {
   try {
+    console.log('HTTP DELETE REQUEST /:collection');
+
     const collection = client.db(dbName).collection(req.params.collection);
 
     console.log('delete', req.params.collection, req.body);

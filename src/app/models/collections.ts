@@ -14,6 +14,7 @@ export interface user extends collection {
 
 export interface cartItem extends collection {
     userId: string;
+    productId: string;
     name: string;
     price: number;
     description?: string;

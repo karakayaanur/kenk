@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../services/user.service';
-import { user } from '../../models/collections';
+import { cartItem, user } from '../../models/collections';
 
 @Component({
   selector: 'app-header',
@@ -15,15 +15,29 @@ import { user } from '../../models/collections';
 export class HeaderComponent implements OnInit {
   public visibleSignIn: boolean = false;
   public visibleSignUp: boolean = false;
+  public visibleCart: boolean = false;
   public isSignedIn: boolean = false;
 
   public user: user | undefined = undefined;
+  public cartItems: cartItem[] = [];
 
   constructor(private readonly userService: UserService) { }
 
   public ngOnInit(): void {
     this.isSignedIn = this.userService.isSignedIn();
     this.user = this.userService.user;
+
+    if (this.isSignedIn) {
+      this.userService.loadCartItems();
+    }
+
+    this.userService.cartItems.subscribe(cartItemState => {
+      if (!cartItemState) {
+        return;
+      }
+
+      this.cartItems = cartItemState;
+    });
   }
 
   public signIn(email: string, password: string): void {
@@ -50,5 +64,9 @@ export class HeaderComponent implements OnInit {
 
   public signOut(): void {
     this.userService.signOut();
+  }
+
+  public checkout(): void {
+
   }
 }

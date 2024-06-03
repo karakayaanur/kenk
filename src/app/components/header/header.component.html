@@ -1,4 +1,108 @@
-<!-- header.component.html -->
+<div class="flex justify-between items-center p-4 bg-rose-100">
+    <span class="text-black text-2xl font-extrabold">kenk</span>
+    <div class="flex space-x-1">
+      <ng-container *ngIf="!isSignedIn">
+        <button (click)="visibleSignIn = true" pButton
+          class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Sign In</button>
+        <button (click)="visibleSignUp = true" pButton
+          class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Sign Up</button>
+      </ng-container>
+      <ng-container *ngIf="isSignedIn && user">
+        <span>{{ user.name }} {{ user.surname }}</span>
+        <button (click)="signOut()" pButton
+          class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Sign Out</button>
+        <button (click)="visibleCart = true" pButton
+          class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Cart</button>
+      </ng-container>
+    </div>
+  </div>
+  
+  <ng-container *ngIf="!isSignedIn">
+    <p-dialog header="Sign In" [(visible)]="visibleSignIn" [modal]="true" [draggable]="false" [resizable]="false"
+        [closeOnEscape]="true" [closable]="true" [style]="{'min-width': '300px'}">
+      <div class="p-fluid space-y-4 p-4">
+        <div class="p-field">
+          <label for="email" class="block mb-2">E-mail</label>
+          <input id="email" type="text" pInputText #loginEmail
+              class="p-inputtext p-component w-full border border-black rounded" />
+        </div>
+        <div class="p-field">
+          <label for="password" class="block mb-2">Password</label>
+          <input id="password" type="password" pInputText #loginPassword
+              class="p-inputtext p-component w-full border border-black rounded" />
+        </div>
+        <div class="flex justify-center">
+          <button (click)="signIn(loginEmail.value, loginPassword.value)" pButton
+              class="w-32 h-10 bg-pink-900 text-white hover:bg-blue-700 border border-black">Login</button>
+        </div>
+      </div>
+    </p-dialog>
+  
+    <p-dialog header="Sign Up" [(visible)]="visibleSignUp" [modal]="true" [draggable]="false" [resizable]="false"
+        [closeOnEscape]="true" [closable]="true" [style]="{'min-width': '300px'}">
+      <div class="p-fluid space-y-4 p-4">
+        <div class="p-field">
+          <label for="name" class="block mb-2">Name</label>
+          <input id="name" type="text" pInputText #signUpName
+              class="p-inputtext p-component w-full border border-black rounded h-10" />
+        </div>
+        <div class="p-field">
+          <label for="surname" class="block mb-2">Surname</label>
+          <input id="surname" type="text" pInputText #signUpSurname
+              class="p-inputtext p-component w-full border border-black rounded h-10" />
+        </div>
+        <div class="p-field">
+          <label for="email" class="block mb-2">E-mail</label>
+          <input id="email" type="text" pInputText #signUpEmail
+              class="p-inputtext p-component w-full border border-black rounded h-10" />
+        </div>
+        <div class="p-field">
+          <label for="password" class= "block mb-2">Password</label>
+          <input id="password" type="password" pInputText #signUpPassword
+              class="p-inputtext p-component w-full border border-black rounded h-10" />
+        </div>
+        <div class="flex justify-center">
+          <button (click)="signUp(signUpName.value, signUpSurname.value, signUpEmail.value, signUpPassword.value)"
+              pButton
+              class="w-32 h-10 bg-green-600 text-white hover:bg-green-700 border border-black">Register</button>
+        </div>
+      </div>
+    </p-dialog>
+  </ng-container>
+  
+  <ng-container *ngIf="isSignedIn">
+    <p-dialog header="Shopping Cart" [(visible)]="visibleCart" [modal]="true" [style]="{width: '30vw'}"
+        [resizable]="false" [draggable]="false">
+      <div class="p-grid p-nogutter">
+        <div class="p-col-12" *ngFor="let item of cartItems" class="cart-item">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            <div>{{ item.name }}</div>
+            <div>{{ item.price}} TL</div>
+          </div>
+        </div>
+        <div class="p-col-12 p-text-right">
+          <button pButton type="button" label="Checkout" class="p-button-success" (click)="checkout()"></button>
+        </div>
+      </div>
+    </p-dialog>
+  </ng-container>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- header.component.html
 <div class="flex justify-between items-center p-4 bg-rose-100">
     <span class="text-black text-2xl font-extrabold">kenk</span>
     <div class="flex space-x-1">
@@ -15,9 +119,12 @@
             <button (click)="signOut()" pButton
                 class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Sign
                 Out</button>
+            <button (click)="visibleCart = true" pButton
+                class="px-3 py-2 text-sm bg-black text-white rounded-md hover:bg-rose-300 border border-black text-center">Cart</button>
         </ng-container>
     </div>
 </div>
+
 <ng-container *ngIf="!isSignedIn">
     <p-dialog header="Sign In" [(visible)]="visibleSignIn" [modal]="true" [draggable]="false" [resizable]="false"
         [closeOnEscape]="true" [closable]="true" [style]="{'min-width': '300px'}">
@@ -70,3 +177,20 @@
         </div>
     </p-dialog>
 </ng-container>
+
+<ng-container *ngIf="isSignedIn">
+    <p-dialog header="Shopping Cart" [(visible)]="visibleCart" [modal]="true" [style]="{width: '30vw'}"
+        [resizable]="false" [draggable]="false">
+        <div class="p-grid p-nogutter">
+            <div class="p-col-12" *ngFor="let item of cartItems">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <div>{{ item.name }}</div>
+                    <div>{{ item.price}} TL</div>
+                </div>
+            </div>
+            <div class="p-col-12 p-text-right">
+                <button pButton type="button" label="Checkout" class="p-button-success" (click)="checkout()"></button>
+            </div>
+        </div>
+    </p-dialog>
+</ng-container> -->
