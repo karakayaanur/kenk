@@ -1,88 +1,24 @@
 <div class="grid grid-cols-3 gap-4 p-4">
   <div *ngFor="let product of products" class="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
     <img [src]="product.image" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-t-lg">
-    <div class="p-4 flex flex-row gap-5">
+    <div class="p-4 flex flex-row w-full justify-between p-4">
       <div class="flex flex-col">
         <h3 class="text-lg font-semibold">{{ product.name }}</h3>
         <p class="text-gray-600">{{ product.description }}</p>
-        <p class="font-bold text-green-600">Price: {{ product.price }} TL</p>
+        <p class="font-bold text-black italic text-sm">Price: <span class="text-2xl underline">{{ product.price }}</span> TL</p>
       </div>
       <ng-container *ngIf="isSignedIn">
         <ng-container *ngIf="!isAddedProduct(product)">
           <button (click)="addToCart(product)">
-            <i class="pi pi-cart-plus text-black text-3xl"></i>
+            <i class="pi pi-cart-plus text-green-600 text-3xl"></i>
           </button>
         </ng-container>
         <ng-container *ngIf="isAddedProduct(product)">
           <button (click)="removeToCart(product)">
-            <i class="pi pi-cart-minus text-black text-3xl"></i>
+            <i class="pi pi-cart-minus text-red-500 text-3xl"></i>
           </button>
         </ng-container>
       </ng-container>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="grid grid-cols-3 gap-4 p-4">
-  <div *ngFor="let product of products" class="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
-    <img [src]="product.image" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-t-lg">
-    <div class="p-4 flex flex-row gap-5">
-      <div class="flex flex-col">
-        <h3 class="text-lg font-semibold">{{ product.name }}</h3>
-        <p class="text-gray-600">{{ product.description }}</p>
-        <p class="font-bold text-green-600">Price: {{ product.price }} TL</p>
-      </div>
-      <ng-container *ngIf="isSignedIn">
-        <ng-container *ngIf="!isAddedProduct(product)">
-          <button (click)="addToCart(product)">
-            <i class="pi pi-cart-plus text-black text-3xl"></i>
-          </button>
-        </ng-container>
-        <ng-container *ngIf="isAddedProduct(product)">
-          <button (click)="removeToCart(product)">
-            <i class="pi pi-cart-minus text-black text-3xl"></i>
-          </button>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-</div> -->
-
-
-////////////////////////////////////////////////////////
-<!-- <div class="grid grid-cols-3 gap-4 p-4">
-  <div *ngFor="let product of products" class="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
-    <img [src]="product.image" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-t-lg">
-    <div class="p-4 flex flex-row gap-5">
-      <div class="flex flex-col">
-        <h3 class="text-lg font-semibold">{{ product.name }}</h3>
-        <p class="text-gray-600">{{ product.description }}</p>
-        <p class="font-bold text-green-600">Price: {{ product.price }} TL</p>
-      </div>
-      <ng-container *ngIf="isSignedIn">
-        <ng-container *ngIf="!isAddedProduct(product)">
-          <button (click)="addToCart(product, getCurrentUserId())">
-            <i class="pi pi-cart-plus text-black text-3xl"></i>
-          </button>
-        </ng-container>
-        <ng-container *ngIf="isAddedProduct(product)">
-          <button (click)="removeToCart(product, getCurrentUserId())">
-            <i class="pi pi-cart-minus text-black text-3xl"></i>
-          </button>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-</div> -->

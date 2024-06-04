@@ -1,13 +1,14 @@
 import { BehaviorSubject, Observable, map } from "rxjs";
 import { ServerResponse } from "../models/response";
 import { MongoDbService } from "./mongodb.service";
-import { cartItem, product, user } from "../models/collections";
+import { cartItem, order, product, user } from "../models/collections";
 import { Injectable } from "@angular/core";
 
 @Injectable({ providedIn: 'any' })
 export class UserService {
     private readonly userDb: MongoDbService<user> = new MongoDbService<user>();
     private readonly cartDb: MongoDbService<cartItem> = new MongoDbService<cartItem>();
+    private readonly orderDb: MongoDbService<order> = new MongoDbService<order>();
     private readonly _cartItems: BehaviorSubject<cartItem[]> = new BehaviorSubject<cartItem[]>([]);
 
     private readonly _user: user | undefined = undefined;
@@ -15,6 +16,7 @@ export class UserService {
     constructor() {
         this.userDb.setCollectionName('users');
         this.cartDb.setCollectionName('cartItems');
+        this.orderDb.setCollectionName('orders');
         let userJson = localStorage.getItem('user');
         if (userJson) {
             this._user = JSON.parse(userJson);
@@ -72,7 +74,6 @@ export class UserService {
         return this.cartDb.get({
             userId: this._user ? this._user._id : undefined,
         }).pipe(map(response => {
-            console.log(response);
             if (response.success && response.data) {
                 this._cartItems.next(response.data);
             } else {
@@ -82,33 +83,56 @@ export class UserService {
         }));
     }
 
-     public addCartItem(product: product): Observable<ServerResponse<cartItem>> {
-         return this.cartDb.post({
-            userId: this._user!._id!,
-             productId: product!._id!,
-            name: product!.name!,
-             price: product!.price!,
-             description: product!.description!,
-             image: product!.image!,
-         }).pipe(map(response => {
-             if (response.success && response.data) {
-                 this.loadCartItems();
-             } else {
-                 console.log(response.message);
-             }
-             return response;
-         }));
-     }
+    public flushCartItems(): Observable<boolean> {
+        return this.cartDb.delete({ userId: this._user!._id }).pipe(map(response => {
+            if (response.success && response.data > 0) {
+                this.loadCartItems().subscribe();
+            }
 
- 
-   
-    public removeCartItem(cartItem: cartItem): Observable<ServerResponse<number>> {
-        return this.cartDb.delete(cartItem).pipe(map(response => {
+            return response.success && response.data > 0;
+        }));
+    }
+
+    public addCartItem(product: product): Observable<ServerResponse<cartItem>> {
+        return this.cartDb.post({
+            userId: this._user!._id!,
+            productId: product!._id!,
+            name: product!.name!,
+            price: product!.price!,
+            description: product!.description!,
+            image: product!.image!,
+        }).pipe(map(response => {
             if (response.success && response.data) {
-                this.loadCartItems();
+                this.loadCartItems().subscribe();
             } else {
                 console.log(response.message);
             }
+            return response;
+        }));
+    }
+
+    public removeCartItem(cartItem: cartItem): Observable<ServerResponse<number>> {
+        return this.cartDb.delete(cartItem).pipe(map(response => {
+            if (response.success && response.data) {
+                this.loadCartItems().subscribe();
+            } else {
+                console.log(response.message);
+            }
+            return response;
+        }));
+    }
+
+    public createOrder(): Observable<ServerResponse<order>> {
+        return this.orderDb.post({
+            userId: this._user!._id!,
+            products: this._cartItems.value,
+        }).pipe(map(response => {
+            if (response.success) {
+                this.flushCartItems().subscribe();
+            } else {
+                console.log(response.message);
+            }
+
             return response;
         }));
     }

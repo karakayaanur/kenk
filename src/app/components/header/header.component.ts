@@ -3,14 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 import { UserService } from '../../services/user.service';
 import { cartItem, user } from '../../models/collections';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.component.html',
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule]
+  imports: [CommonModule, FormsModule, DialogModule, ButtonModule, ToastModule],
+  providers: [MessageService]
 })
 export class HeaderComponent implements OnInit {
   public visibleSignIn: boolean = false;
@@ -21,14 +24,14 @@ export class HeaderComponent implements OnInit {
   public user: user | undefined = undefined;
   public cartItems: cartItem[] = [];
 
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService, private readonly messageService: MessageService) { }
 
   public ngOnInit(): void {
     this.isSignedIn = this.userService.isSignedIn();
     this.user = this.userService.user;
 
     if (this.isSignedIn) {
-      this.userService.loadCartItems();
+      this.userService.loadCartItems().subscribe();
     }
 
     this.userService.cartItems.subscribe(cartItemState => {
@@ -67,6 +70,10 @@ export class HeaderComponent implements OnInit {
   }
 
   public checkout(): void {
-
+    this.userService.createOrder().subscribe(response => {
+      if (response.success) {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Order completed successfully 😂 🎉' });
+      }
+    });
   }
 }

@@ -21,6 +21,11 @@ export interface cartItem extends collection {
     image?: string;
 }
 
+export interface order extends collection {
+    userId: string;
+    products: product[];
+}
+
 export interface collection {
     _id?: string;
 }

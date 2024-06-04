@@ -37,7 +37,7 @@ app.get('/:collection/first', async function (req, res) {
 
     } else {
 
-      res.status(404).send({ success: false, message: 'Failed to find document' });
+      res.status(200).send({ success: false, message: 'Failed to find document' });
 
     }
   } catch (error) {
@@ -67,7 +67,7 @@ app.get('/:collection', async function (req, res) {
 
     } else {
 
-      res.status(404).send({ success: false, message: 'Failed to find documents' });
+      res.status(200).send({ success: false, message: 'Failed to find documents' });
 
     }
   } catch (error) {
@@ -94,7 +94,7 @@ app.put('/:collection', async function (req, res) {
 
     } else {
 
-      res.status(404).send({ success: false, message: 'Failed to update document' });
+      res.status(200).send({ success: false, message: 'Failed to update document' });
 
     }
   } catch (error) {
@@ -121,7 +121,7 @@ app.post('/:collection', async function (req, res) {
 
     } else {
 
-      res.status(404).send({ success: false, message: 'Failed to insert document' });
+      res.status(200).send({ success: false, message: 'Failed to insert document' });
 
     }
   } catch (error) {
@@ -147,7 +147,7 @@ app.delete('/:collection', async function (req, res) {
 
     } else {
 
-      res.status(404).send({ success: false, message: 'No documents found' });
+      res.status(200).send({ success: false, message: 'No documents found' });
 
     }
   } catch (error) {
